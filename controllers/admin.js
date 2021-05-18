@@ -40,7 +40,19 @@ exports.postAddProduct = (req, res, next) => {
 }
 
 exports.getEditProduct = (req, res, next) => {
-
+  
+  //追加
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(402).render('admin/edit-product',{
+      pageTitle: 'Edit',
+      path: 'admin/edit-product',
+      editing: editMode,
+      product: product,
+      errorMessage: errors.array(),
+    });
+  }
+  //
 
 
   const editMode = req.query.edit

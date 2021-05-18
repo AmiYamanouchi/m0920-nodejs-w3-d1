@@ -13,7 +13,8 @@ exports.getLogin = (req,res,next) => {
     res.render('auth/login', {
         pageTitle: 'Login',
         path: '/login',
-        errorMessage: errMsg
+        isAuth: req.session.isLoggedIn, //追加
+        errorMessage: errMsg,
     })
 }
 
@@ -22,9 +23,9 @@ exports.postLogin = (req,res,next) => {
     //res.redirect('/')
     // res.setHeader('Set-Cookie', 'loggedIn=true')
 
-    const { email, password } = req.body
+    const { email, password } = req.body;
 
-    const errors = validationResult(req)
+    const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(422).render('auth/login', {
             pageTitle: 'Login',
@@ -43,8 +44,8 @@ exports.postLogin = (req,res,next) => {
         //if user is found
         bcrypt.compare(password, user.password).then((isMatching) => {
             if(isMatching){
-                req.session.isLoggedIn = true
-                req.session.user = user
+                req.session.isLoggedIn = true;
+                req.session.user = user;
                 return req.session.save((err) => {
                     console.log(err)
                     res.redirect('/')
